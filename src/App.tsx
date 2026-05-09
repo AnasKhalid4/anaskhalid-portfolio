@@ -349,17 +349,17 @@ export default function App() {
             style={{ y: heroY, opacity: heroOpacity, willChange: "transform, opacity" }}
           >
             <div className="flex justify-between items-end pointer-events-auto">
-              <ScrollReveal delay={0.2} className="flex items-center gap-3 font-sans font-medium text-white hover:text-white/60 transition-colors cursor-pointer group">
+              <a href="https://www.linkedin.com/in/anas-khalid1/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 font-sans font-medium text-white hover:text-white/60 transition-colors cursor-pointer group">
                 <div className="border border-white p-1.5 rounded-sm">
                   <Icons.Linkedin size={16} />
                 </div>
                 LinkedIn
-              </ScrollReveal>
+              </a>
 
-              <ScrollReveal delay={0.3} className="text-right">
-                <p className="font-display font-bold text-base sm:text-xl md:text-4xl tracking-tight text-white uppercase"> Software Engineer</p>
+              <div className="text-right">
+                <p className="font-display font-bold text-base sm:text-xl md:text-4xl tracking-tight text-white uppercase">Software Engineer</p>
                 <p className="font-display font-bold text-base sm:text-xl md:text-4xl tracking-tight text-white uppercase mt-1 md:mt-2">Devbeings</p>
-              </ScrollReveal>
+              </div>
             </div>
           </motion.div>
         </section>
@@ -384,9 +384,9 @@ export default function App() {
               INTRO
             </motion.span>
           </div>
-          <h2 className="font-display text-[1.65rem] sm:text-4xl md:text-7xl font-semibold leading-[1.15] max-w-5xl tracking-tighter uppercase">
+          <h2 className="font-display text-[1.65rem] sm:text-4xl md:text-7xl font-semibold leading-[1.15] max-w-5xl tracking-tight md:tracking-tighter uppercase">
             {"I engineer intelligent platforms that push the boundaries of digital reality.".split(" ").map((word, i) => (
-              <span key={i} className="inline-block overflow-hidden pb-4 -mb-4 mr-[0.2em] md:mr-[0.25em]">
+              <span key={i} className="inline-block overflow-hidden pb-2 -mb-2 md:pb-4 md:-mb-4 mr-[0.18em] sm:mr-[0.22em] md:mr-[0.25em]">
                 <motion.span
                   initial={{ y: "100%", opacity: 0, rotate: 5 }}
                   whileInView={{ y: 0, opacity: 1, rotate: 0 }}
