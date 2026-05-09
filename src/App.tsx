@@ -345,7 +345,7 @@ export default function App() {
           </motion.div>
 
           <motion.div
-            className="relative z-20 w-full h-full flex flex-col justify-end max-w-7xl pb-12 pointer-events-none px-6"
+            className="relative z-20 w-full h-full flex flex-col justify-end max-w-7xl pb-12 pointer-events-none px-2 md:px-6"
             style={{ y: heroY, opacity: heroOpacity, willChange: "transform, opacity" }}
           >
             <div className="flex justify-between items-end pointer-events-auto">
@@ -384,9 +384,9 @@ export default function App() {
               INTRO
             </motion.span>
           </div>
-          <h2 className="font-display text-2xl sm:text-3xl md:text-7xl font-semibold leading-[1.1] max-w-5xl tracking-tighter uppercase">
+          <h2 className="font-display text-[1.65rem] sm:text-4xl md:text-7xl font-semibold leading-[1.15] max-w-5xl tracking-tighter uppercase">
             {"I engineer intelligent platforms that push the boundaries of digital reality.".split(" ").map((word, i) => (
-              <span key={i} className="inline-block overflow-hidden pb-4 -mb-4 mr-[0.25em]">
+              <span key={i} className="inline-block overflow-hidden pb-4 -mb-4 mr-[0.2em] md:mr-[0.25em]">
                 <motion.span
                   initial={{ y: "100%", opacity: 0, rotate: 5 }}
                   whileInView={{ y: 0, opacity: 1, rotate: 0 }}
@@ -623,7 +623,7 @@ export default function App() {
               </div>
 
               {/* Tabs */}
-              <div className="flex border border-white/10">
+              <div className="flex w-fit border border-white/10">
                 {(['web', 'mobile'] as const).map(tab => (
                   <button
                     key={tab}
