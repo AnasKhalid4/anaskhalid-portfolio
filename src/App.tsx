@@ -327,7 +327,7 @@ export default function App() {
             style={{ y: heroY, opacity: heroOpacity, willChange: "transform, opacity" }}
           >
             <motion.div
-              className="flex w-max whitespace-nowrap text-[44vw] lg:text-[20vw] font-display font-black text-white/70 leading-[0.8] tracking-tighter uppercase pb-10"
+              className="flex w-max whitespace-nowrap text-[36vw] md:text-[28vw] lg:text-[20vw] font-display font-black text-white/70 leading-[0.8] tracking-tighter uppercase pb-10"
               animate={{ x: ["0%", "-50%"] }}
               transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
               style={{ willChange: "transform" }}
@@ -345,7 +345,7 @@ export default function App() {
           </motion.div>
 
           <motion.div
-            className="relative z-20 w-full h-full flex flex-col justify-end max-w-7xl pb-12 pointer-events-none"
+            className="relative z-20 w-full h-full flex flex-col justify-end max-w-7xl pb-12 pointer-events-none px-6"
             style={{ y: heroY, opacity: heroOpacity, willChange: "transform, opacity" }}
           >
             <div className="flex justify-between items-end pointer-events-auto">
@@ -357,15 +357,15 @@ export default function App() {
               </ScrollReveal>
 
               <ScrollReveal delay={0.3} className="text-right">
-                <p className="font-display font-bold text-3xl md:text-4xl tracking-tight text-white uppercase"> Software Engineer</p>
-                <p className="font-display font-bold text-3xl md:text-4xl tracking-tight text-white uppercase">Devbeings</p>
+                <p className="font-display font-bold text-base sm:text-xl md:text-4xl tracking-tight text-white uppercase"> Software Engineer</p>
+                <p className="font-display font-bold text-base sm:text-xl md:text-4xl tracking-tight text-white uppercase mt-1 md:mt-2">Devbeings</p>
               </ScrollReveal>
             </div>
           </motion.div>
         </section>
 
         {/* Intro */}
-        <section id="about" className="max-w-7xl mx-auto px-6 py-40">
+        <section id="about" className="max-w-7xl mx-auto px-6 py-20 md:py-40">
           <div className="flex items-center gap-4 mb-10 overflow-hidden">
             <motion.div
               initial={{ scaleX: 0 }}
@@ -384,7 +384,7 @@ export default function App() {
               INTRO
             </motion.span>
           </div>
-          <h2 className="font-display text-4xl md:text-7xl font-semibold leading-[1.1] max-w-5xl tracking-tighter uppercase">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-7xl font-semibold leading-[1.1] max-w-5xl tracking-tighter uppercase">
             {"I engineer intelligent platforms that push the boundaries of digital reality.".split(" ").map((word, i) => (
               <span key={i} className="inline-block overflow-hidden pb-4 -mb-4 mr-[0.25em]">
                 <motion.span
@@ -408,7 +408,7 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-            className="mt-12 text-white/60 text-lg md:text-2xl font-light leading-relaxed max-w-3xl"
+            className="mt-8 md:mt-12 text-white/60 text-base md:text-2xl font-light leading-relaxed max-w-3xl"
           >
             As a Software Engineer with two years of dedicated experience, I specialize in transforming complex problems into elegant, scalable code. My core expertise spans across building interconnected <strong className="text-white font-normal">IoT architectures</strong>, high-performance <strong className="text-white font-normal">SaaS applications</strong>, and cutting-edge <strong className="text-white font-normal">AI-powered platforms</strong>.
           </motion.p>
@@ -523,7 +523,7 @@ export default function App() {
         )}
 
         {/* Experience & Education */}
-        <div className="max-w-7xl mx-auto px-6 py-40 grid grid-cols-1 md:grid-cols-2 gap-24 border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-6 py-20 md:py-40 grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 border-t border-white/10">
           {/* Experience */}
           <div id="experience">
             <ScrollReveal>
@@ -531,7 +531,7 @@ export default function App() {
                 <div className="w-10 h-[1px] bg-white opacity-20" />
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">EXPERIENCE</span>
               </div>
-              <h2 className="font-display text-5xl md:text-6xl font-bold leading-[0.9] uppercase mb-16 tracking-tighter">
+              <h2 className="font-display text-3xl sm:text-4xl md:text-6xl font-bold leading-[0.9] uppercase mb-10 md:mb-16 tracking-tighter">
                 BUILDING THE <span className="text-gold">FUTURE</span> OF WORK
               </h2>
             </ScrollReveal>
@@ -567,7 +567,7 @@ export default function App() {
                 <div className="w-10 h-[1px] bg-white opacity-20" />
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">EDUCATION</span>
               </div>
-              <h2 className="font-display text-5xl md:text-6xl font-bold leading-[0.9] uppercase mb-16 tracking-tighter">
+              <h2 className="font-display text-3xl sm:text-4xl md:text-6xl font-bold leading-[0.9] uppercase mb-10 md:mb-16 tracking-tighter">
                 ACADEMIC <span className="text-gold">FOUNDATION</span>
               </h2>
             </ScrollReveal>
@@ -592,10 +592,10 @@ export default function App() {
         </div>
 
         {/* Marquee */}
-        <section className="py-12 bg-white/5 border-y border-white/10 relative overflow-hidden">
+        <section className="py-8 md:py-12 bg-white/5 border-y border-white/10 relative overflow-hidden">
           <div className="flex animate-marquee whitespace-nowrap">
             {[1, 2, 3].map((set) => (
-              <div key={set} className="flex gap-20 px-10 items-center font-display text-4xl md:text-6xl text-white/20 tracking-[0.2em] font-semibold uppercase">
+              <div key={set} className="flex gap-10 md:gap-20 px-6 md:px-10 items-center font-display text-2xl sm:text-3xl md:text-6xl text-white/20 tracking-[0.1em] md:tracking-[0.2em] font-semibold uppercase">
                 <span className="hover:text-gold transition-colors cursor-default">NEXT.JS</span>
                 <span className="text-gold/30">•</span>
                 <span className="hover:text-gold transition-colors cursor-default">SUPABASE</span>
@@ -614,9 +614,9 @@ export default function App() {
         </section>
 
         {/* Featured Work - Custom Projects */}
-        <section id="work" className="max-w-7xl mx-auto px-6 py-40 border-t border-white/10">
+        <section id="work" className="max-w-7xl mx-auto px-6 py-20 md:py-40 border-t border-white/10">
           <ScrollReveal>
-            <div className="flex items-center justify-between mb-20">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between mb-12 md:mb-20">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-[1px] bg-white opacity-20" />
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">FEATURED WORK</span>
@@ -628,7 +628,7 @@ export default function App() {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`font-mono text-[10px] uppercase tracking-widest px-8 py-3 transition-all duration-300 ${activeTab === tab
+                    className={`font-mono text-[10px] uppercase tracking-widest px-6 sm:px-8 py-3 transition-all duration-300 ${activeTab === tab
                       ? 'bg-white text-black'
                       : 'text-white/40 hover:text-white'
                       }`}
@@ -640,7 +640,7 @@ export default function App() {
             </div>
           </ScrollReveal>
 
-          <div className="flex flex-col gap-32">
+          <div className="flex flex-col gap-20 md:gap-32">
             {[
               {
                 title: "ALTAYRA",
@@ -729,15 +729,15 @@ export default function App() {
 
                   <div className="lg:col-span-6">
                     <ScrollReveal>
-                      <h3 className="font-display text-6xl md:text-[5vw] leading-[0.9] text-gold font-bold uppercase mb-8 tracking-tighter group-hover:scale-[1.02] transition-transform duration-500 origin-left">
+                      <h3 className="font-display text-3xl sm:text-4xl md:text-[5vw] leading-[0.9] text-gold font-bold uppercase mb-6 md:mb-8 tracking-tighter group-hover:scale-[1.02] transition-transform duration-500 origin-left">
                         {project.title}
                       </h3>
-                      <p className="text-white/60 text-lg md:text-xl font-light leading-relaxed max-w-xl mb-8">
+                      <p className="text-white/60 text-base md:text-xl font-light leading-relaxed max-w-xl mb-6 md:mb-8">
                         {project.desc}
                       </p>
 
                       {/* Technologies */}
-                      <div className="flex flex-wrap gap-3 mb-12">
+                      <div className="flex flex-wrap gap-2 md:gap-3 mb-8 md:mb-12">
                         {project.tech.map(tech => (
                           <div key={tech} className="px-4 py-2 rounded-full border border-white/10 bg-white/[0.02] text-white/50 font-mono text-[10px] uppercase tracking-widest hover:border-gold/30 hover:text-gold transition-colors cursor-default">
                             {tech}
@@ -749,7 +749,7 @@ export default function App() {
                         href={project.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="h-40 w-40 rounded-full border border-white/20 flex items-center justify-center group/btn hover:bg-white hover:border-white hover:text-black hover:scale-110 transition-all duration-500 font-mono text-[10px] uppercase tracking-widest"
+                        className="h-28 w-28 md:h-40 md:w-40 rounded-full border border-white/20 flex items-center justify-center group/btn hover:bg-white hover:border-white hover:text-black hover:scale-110 transition-all duration-500 font-mono text-[10px] uppercase tracking-widest"
                       >
                         VIEW CASE
                       </a>
@@ -762,9 +762,9 @@ export default function App() {
 
         {/* Philosophy CTA - Hidden for individual portfolio */}
         {true && (
-          <section id="philosophy" className="max-w-7xl mx-auto px-6 py-40 border-t border-white/5 text-center">
+          <section id="philosophy" className="max-w-7xl mx-auto px-6 py-20 md:py-40 border-t border-white/5 text-center">
             <ScrollReveal direction="none">
-              <h2 className="font-display text-6xl md:text-[6vw] font-bold leading-[1] uppercase tracking-tighter mb-40">
+              <h2 className="font-display text-2xl sm:text-4xl md:text-[6vw] font-bold leading-[1.1] uppercase tracking-tighter mb-16 md:mb-40">
                 Experience The <span className="text-white/30 italic font-medium">Extraordinary.</span><br />
                 I BUILD IT. IT SHIPS. IT RUNS.
               </h2>
@@ -777,17 +777,17 @@ export default function App() {
 
               ].map((item, i) => (
                 <ScrollReveal key={item.label} delay={i * 0.1} className="bg-surface flex justify-between items-center p-12 group hover:bg-white transition-all duration-500">
-                  <span className="font-display text-4xl md:text-5xl font-bold tracking-widest group-hover:text-black transition-colors">{item.label}</span>
-                  <span className="font-mono text-xs text-white/30 border border-white/10 rounded-full px-4 py-2 group-hover:border-black group-hover:text-black transition-all">{item.val}</span>
+                  <span className="font-display text-xl sm:text-3xl md:text-5xl font-bold tracking-wider md:tracking-widest group-hover:text-black transition-colors">{item.label}</span>
+                  <span className="font-mono text-[10px] md:text-xs text-white/30 border border-white/10 rounded-full px-3 md:px-4 py-1.5 md:py-2 group-hover:border-black group-hover:text-black transition-all">{item.val}</span>
                 </ScrollReveal>
               ))}
             </div>
 
-            <div className="mt-40">
+            <div className="mt-16 md:mt-40">
               <ScrollReveal direction="none">
                 <a
                   href="mailto:anaskhalid40400@gmail.com"
-                  className="inline-flex items-center gap-6 border border-white px-16 py-10 font-mono text-xs uppercase tracking-[0.4em] hover:bg-white hover:text-black transition-all hover:scale-105 active:scale-95"
+                  className="inline-flex items-center gap-4 md:gap-6 border border-white px-8 py-6 md:px-16 md:py-10 font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.4em] hover:bg-white hover:text-black transition-all hover:scale-105 active:scale-95"
                 >
                   Contact Me <Icons.ArrowRight size={16} />
                 </a>
