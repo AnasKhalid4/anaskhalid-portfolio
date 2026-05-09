@@ -1,0 +1,47 @@
+  @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Onest:wght@400;500;600;700;800;900&family=Space+Mono&display=swap');
+  @import "tailwindcss";
+
+  @theme {
+    --font-display: "Onest", sans-serif;
+    --font-sans: "Onest", sans-serif;
+    --font-mono: "Space Mono", monospace;
+    --font-cursive: "Great Vibes", cursive;
+
+    --color-gold: #EAB308;
+    --color-surface: #131313;
+    --color-surface-low: #0e0e0e;
+    --color-surface-high: #1c1c1c;
+
+    --animate-marquee: marquee 30s linear infinite;
+
+    @keyframes marquee {
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+
+      to {
+        transform: translate3d(-50%, 0, 0);
+      }
+    }
+  }
+
+  @layer base {
+    html {
+      scroll-behavior: initial;
+      scroll-padding-top: 5rem;
+      min-height: 100%;
+      height: -webkit-fill-available;
+      @apply bg-surface text-white antialiased selection:bg-white selection:text-black;
+    }
+
+    body {
+      min-height: 100%;
+      min-height: -webkit-fill-available;
+      @apply font-sans overflow-x-hidden;
+    }
+
+    .hero-full {
+      height: var(--hero-h);
+      /* no fallback — var is always set before paint */
+    }
+  }
