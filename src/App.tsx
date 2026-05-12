@@ -94,7 +94,7 @@ const Preloader = ({ onComplete }: { onComplete: () => void }) => {
     >
       <div className="relative flex items-center justify-center">
         {/* Base Text */}
-        <h1 className="font-cursive text-5xl md:text-7xl text-white/20 tracking-normal select-none relative pb-2 pr-8 pl-2">
+        <h1 className="font-cursive text-5xl md:text-7xl text-white/20 tracking-normal select-none relative pb-2 prsar-8 pl-2">
           Anas Khalid
           
           {/* Fill Text Container */}
@@ -575,9 +575,9 @@ export default function App() {
             <div className="flex flex-col gap-16">
               {[
                 {
-                  degree: "Bachelor of Science — Computer Science",
-                  school: "University of Sargodha",
-                  date: "2021 – 2025",
+                  degree: "Bachelor of Sciences in Computer Science",
+                  school: "Comsats University Islamabad",
+                  date: "2020 – 2024",
                   desc: "Focused on software engineering, data structures, algorithms, and system design. Built a strong foundation in full-stack development and distributed systems that underpins every production system built today."
                 }
               ].map((edu, i) => (
