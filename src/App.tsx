@@ -751,7 +751,7 @@ export default function App() {
                         rel="noopener noreferrer"
                         className="h-28 w-28 md:h-40 md:w-40 rounded-full border border-white/20 flex items-center justify-center group/btn hover:bg-white hover:border-white hover:text-black hover:scale-110 transition-all duration-500 font-mono text-[10px] uppercase tracking-widest"
                       >
-                        VIEW CASE
+                        VIEW LIVE
                       </a>
                     </ScrollReveal>
                   </div>
