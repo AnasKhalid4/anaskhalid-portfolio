@@ -349,7 +349,7 @@ export default function App() {
           >
 
             {/* Giant Modern Cinematic Heading */}
-            <h1 className="font-display text-[14vw] sm:text-[11vw] lg:text-[9vw] font-black leading-[0.8] tracking-tighter uppercase text-white select-none">
+            <h1 className="font-display text-[18vw] sm:text-[11vw] lg:text-[9vw] font-black leading-[0.8] tracking-tighter uppercase text-white select-none">
               <motion.span
                 initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0 }}
