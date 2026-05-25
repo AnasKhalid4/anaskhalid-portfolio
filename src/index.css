@@ -27,17 +27,49 @@
 
   @layer base {
     html {
-      scroll-behavior: initial;
       scroll-padding-top: 5rem;
       min-height: 100%;
-      height: -webkit-fill-available;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
       @apply bg-surface text-white antialiased selection:bg-white selection:text-black;
     }
 
     body {
       min-height: 100%;
-      min-height: -webkit-fill-available;
       @apply font-sans overflow-x-hidden;
+    }
+
+    /* GPU-accelerate all images to prevent scroll repaint storms */
+    img {
+      content-visibility: auto;
+      will-change: opacity;
+    }
+
+    /* Optimize section rendering isolation */
+    section {
+      contain: content;
+    }
+
+    /* Lenis Smooth Scroll Enhancements */
+    html.lenis, html.lenis body {
+      height: auto;
+    }
+
+    .lenis.lenis-smooth {
+      scroll-behavior: auto !important;
+    }
+
+    .lenis.lenis-smooth [data-lenis-prevent] {
+      overscroll-behavior: contain;
+    }
+
+    .lenis.lenis-stopped {
+      overflow: hidden;
+    }
+
+    .lenis.lenis-scrolling iframe {
+      pointer-events: none;
     }
 
     .hero-full {

@@ -22,17 +22,15 @@ export default function ScrollReveal({
 }: ScrollRevealProps) {
   const variants = {
     hidden: { 
-      opacity: 0.2, 
-      y: direction === "up" ? 40 : direction === "down" ? -40 : 0,
-      filter: "brightness(0.5)"
+      opacity: 0, 
+      y: direction === "up" ? 30 : direction === "down" ? -30 : 0,
     },
     visible: { 
       opacity: 1, 
       y: 0,
-      filter: "brightness(1)",
       transition: {
-        duration: 1,
-        ease: [0.22, 1, 0.36, 1],
+        duration: 0.8,
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
         delay: delay
       }
     }

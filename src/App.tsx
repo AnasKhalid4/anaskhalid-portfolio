@@ -8,6 +8,7 @@ import Lenis from "lenis";
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
 import * as Icons from "./icons";
 import ScrollReveal from "./components/ScrollReveal";
+import ProjectFlowDiagram from "./components/ProjectFlowDiagram";
 import altayraImg from '../assets/altayra.png';
 import medicalImg from '../assets/medical-fitness-pros.png';
 import cronotaxImg from '../assets/cronotax.png';
@@ -117,6 +118,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'web' | 'mobile'>('web');
+  const [projectViews, setProjectViews] = useState<Record<string, 'mockup' | 'flow'>>({});
   const [heroHeight] = useState(() => window.innerHeight);
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 1000], [0, 250]);
@@ -128,6 +130,10 @@ export default function App() {
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      wheelMultiplier: 1.0,
     });
 
     function raf(time: number) {
@@ -136,7 +142,33 @@ export default function App() {
     }
 
     requestAnimationFrame(raf);
-    return () => lenis.destroy();
+
+    // Global anchor click listener for buttery smooth scrolling
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const anchor = target.closest('a');
+      if (anchor && anchor.getAttribute('href')?.startsWith('#')) {
+        const targetId = anchor.getAttribute('href');
+        if (targetId) {
+          e.preventDefault();
+          const targetElement = document.querySelector(targetId) as HTMLElement;
+          if (targetElement) {
+            lenis.scrollTo(targetElement, {
+              offset: -80, // match header height spacing
+              duration: 1.5,
+              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            });
+          }
+        }
+      }
+    };
+
+    document.addEventListener('click', handleAnchorClick);
+
+    return () => {
+      lenis.destroy();
+      document.removeEventListener('click', handleAnchorClick);
+    };
   }, [isLoading]);
 
   return (
@@ -243,7 +275,6 @@ export default function App() {
       <main>
         {/* Hero Section */}
         <section
-
           className="hero-full relative flex flex-col justify-center items-center px-6 overflow-hidden bg-black text-white"
           style={{ height: heroHeight }}
         >
@@ -258,7 +289,7 @@ export default function App() {
               }}
             >
               {/* Fully GPU Accelerated Electricity Flows via SVG Masking */}
-              <svg className="absolute inset-0 w-full h-full drop-shadow-[0_0_12px_rgba(255,255,255,1)]" xmlns="http://www.w3.org/2000/svg">
+              <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   {/* Dim Base Pattern */}
                   <pattern id="triangle-grid-base" width="120" height="120" patternUnits="userSpaceOnUse">
@@ -309,57 +340,62 @@ export default function App() {
             </div>
           </div>
 
-          {/* Image (Behind) */}
-          {/* <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
-            <motion.img
-              initial={{ scale: 1.05, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi_dw7fIiV7cBXPVIsSF768mjMnoBy6-8kZo6pFqdeYTbP6UuLndEerTCl-T2_3ra-DycLSAHBf1figcLQHKeZxKWltfdg68qKCR_ghAlLiD8yreh0jqHjazPktouDXXGfYsAjNxuH6trq5QqiTakNdM6Udlt5fyNuJ0zcoNiCC_6lO8LDe-GD_kweiekyV6geVZxPOydB2TS43tx63WYpNgxe5bKQKeU_JoDOdEoaugy-GKEkrGVyFzXAPsMvJYQxYZDGR1ZKUdI"
-              alt="Portrait"
-              className="h-[90%] w-auto object-contain grayscale contrast-125 pt-20"
-            />
-          </div> */}
 
-          {/* Moving Name Marquee (In Front, with Parallax) */}
+
+          {/* Central Typographic Cinematic Core */}
           <motion.div
-            className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none overflow-hidden"
+            className="relative z-20 flex flex-col items-center justify-center max-w-6xl text-center pointer-events-none mt-12"
             style={{ y: heroY, opacity: heroOpacity, willChange: "transform, opacity" }}
           >
-            <motion.div
-              className="flex w-max whitespace-nowrap text-[36vw] md:text-[28vw] lg:text-[20vw] font-display font-black text-white/70 leading-[0.8] tracking-tighter uppercase pb-10"
-              animate={{ x: ["0%", "-50%"] }}
-              transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
-              style={{ willChange: "transform" }}
+
+            {/* Giant Modern Cinematic Heading */}
+            <h1 className="font-display text-[14vw] sm:text-[11vw] lg:text-[9vw] font-black leading-[0.8] tracking-tighter uppercase text-white select-none">
+              <motion.span
+                initial={{ opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className="block bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/40"
+              >
+                ANAS KHALID
+              </motion.span>
+            </h1>
+
+            {/* Futuristic Subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.45 }}
+              className="font-mono text-[12px] sm:text-[14px] md:text-[16px] uppercase tracking-[0.2em] text-white/60 max-w-4xl mt-8 px-6 leading-relaxed"
             >
-              {/* First Half */}
-              <span className="mx-8">ANAS KHALID</span>
-              <span className="mx-8">ANAS KHALID</span>
-              <span className="mx-8">ANAS KHALID</span>
-              <span className="mx-8">ANAS KHALID</span>
-              {/* Second Half (Exact Match for Seamless Loop) */}
-              <span className="mx-8">ANAS KHALID</span>
-              <span className="mx-8">ANAS KHALID</span>
-              <span className="mx-8">ANAS KHALID</span>
-            </motion.div>
+              Building high-performance IoT telemetry networks, intelligent AI pipelines, and premium web & mobile ecosystems.
+            </motion.p>
+
+
           </motion.div>
 
+          {/* Absolute Bottom HUD elements */}
           <motion.div
-            className="relative z-20 w-full h-full flex flex-col justify-end max-w-7xl pb-12 pointer-events-none px-2 md:px-6"
-            style={{ y: heroY, opacity: heroOpacity, willChange: "transform, opacity" }}
+            className="absolute bottom-8 left-0 w-full z-20 px-6 md:px-10 flex justify-between items-end pointer-events-none"
+            style={{ opacity: heroOpacity }}
           >
-            <div className="flex justify-between items-end pointer-events-auto">
-              <a href="https://www.linkedin.com/in/anas-khalid1/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 font-sans font-medium text-white hover:text-white/60 transition-colors cursor-pointer group">
-                <div className="border border-white p-1.5 rounded-sm">
-                  <Icons.Linkedin size={16} />
-                </div>
-                LinkedIn
+            {/* LinkedIn social overlay */}
+            <div className="pointer-events-auto hidden sm:block">
+              <a 
+                href="https://www.linkedin.com/in/anas-khalid1/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-widest text-white/40 hover:text-white transition-colors cursor-pointer group"
+              >
+                <Icons.Linkedin size={14} className="text-white/40 group-hover:text-gold transition-colors" />
+                <span>LinkedIn</span>
               </a>
+            </div>
 
-              <div className="text-right">
-                <p className="font-display font-bold text-base sm:text-xl md:text-4xl tracking-tight text-white uppercase">Software Engineer</p>
-                <p className="font-display font-bold text-base sm:text-xl md:text-4xl tracking-tight text-white uppercase mt-1 md:mt-2">Devbeings</p>
-              </div>
+
+
+            {/* Coordinates HUD overlay */}
+            <div className="font-mono text-[9px] uppercase tracking-widest text-white/30 text-right hidden sm:block">
+              [ SYS_STATUS: ACTIVE // PING: 14MS ]
             </div>
           </motion.div>
         </section>
@@ -614,7 +650,7 @@ export default function App() {
         </section>
 
         {/* Featured Work - Custom Projects */}
-        <section id="work" className="max-w-7xl mx-auto px-6 py-20 md:py-40 border-t border-white/10">
+        <section id="work" className="max-w-7xl mx-auto px-6 py-20 md:py-40 border-t border-white/10" style={{ contain: 'layout style' }}>
           <ScrollReveal>
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between mb-12 md:mb-20">
               <div className="flex items-center gap-4">
@@ -692,42 +728,97 @@ export default function App() {
               }
             ]
               .filter(p => p.category === activeTab)
-              .map((project, i) => (
-                <div key={project.title} className="group relative grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center">
-                  <div className={`lg:col-span-6 ${i % 2 !== 0 ? 'lg:order-last' : ''}`}>
-                    <ScrollReveal direction="none">
-                      {project.category === 'mobile' ? (
-                        /* Mobile: clean image, no dark box */
-                        <div className="relative max-w-xs mx-auto">
-                          <img
-                            src={project.imgSrc}
-                            alt={project.title}
-                            className="w-full h-auto object-contain opacity-90 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700 drop-shadow-[0_20px_60px_rgba(255,255,255,0.08)]"
-                          />
-                        </div>
-                      ) : (
-                        /* Web: spinning glow box */
-                        <div className="relative aspect-video max-w-lg mx-auto rounded-lg overflow-hidden p-[1px]">
-                          {/* Spinning Glow */}
-                          <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0_270deg,rgba(220,220,220,0.8)_360deg)] animate-[spin_8s_linear_infinite]" />
-
-                          {/* Inner Box */}
-                          <div className="relative w-full h-full bg-[#050505] rounded-sm flex flex-col items-center justify-center gap-4 overflow-hidden z-10">
-                            {/* Static subtle inner border and background */}
-                            <div className="absolute inset-0 bg-white/[0.02] border border-white/5 rounded-sm" />
-
-                            <img
-                              src={project.imgSrc}
-                              alt={project.title}
-                              className="absolute inset-0 z-20 w-full h-full object-contain p-6 opacity-80 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
-                            />
+              .map((project, i) => {
+                const activeView = projectViews[project.title] || (project.title === 'DEVLABYRINTH' ? 'mockup' : 'flow');
+                return (
+                  <div key={project.title} className="group relative grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center">
+                  <div className={`${activeView === 'flow' ? 'lg:col-span-7' : 'lg:col-span-6'} ${i % 2 !== 0 ? 'lg:order-last' : ''} transition-all duration-500`}>
+                      {project.title !== "DEVLABYRINTH" && (
+                        <div className="flex justify-between items-center mb-4 max-w-lg mx-auto">
+                          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/30">System Visualizer</span>
+                          <div className="flex items-center gap-1.5 bg-black/40 border border-white/10 p-0.5 rounded-full select-none">
+                            <button
+                              onClick={() => setProjectViews(prev => ({ ...prev, [project.title]: 'mockup' }))}
+                              className={`px-3.5 py-1.5 rounded-full font-mono text-[8px] sm:text-[9px] uppercase tracking-widest transition-all duration-300 cursor-pointer ${
+                                (projectViews[project.title] || (project.title === 'DEVLABYRINTH' ? 'mockup' : 'flow')) === 'mockup'
+                                  ? 'bg-white text-black font-semibold'
+                                  : 'text-white/40 hover:text-white'
+                              }`}
+                            >
+                              Interface
+                            </button>
+                            <button
+                              onClick={() => setProjectViews(prev => ({ ...prev, [project.title]: 'flow' }))}
+                              className={`px-3.5 py-1.5 rounded-full font-mono text-[8px] sm:text-[9px] uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center gap-1.5 ${
+                                (projectViews[project.title] || (project.title === 'DEVLABYRINTH' ? 'mockup' : 'flow')) === 'flow'
+                                  ? 'bg-gold text-black font-semibold shadow-[0_0_10px_rgba(234,179,8,0.3)]'
+                                  : 'text-white/40 hover:text-white'
+                              }`}
+                            >
+                              System Flow
+                              <span className={`inline-block w-1.5 h-1.5 rounded-full ${(projectViews[project.title] || (project.title === 'DEVLABYRINTH' ? 'mockup' : 'flow')) === 'flow' ? 'bg-black animate-ping' : 'bg-gold/60'}`} />
+                            </button>
                           </div>
                         </div>
                       )}
-                    </ScrollReveal>
+
+                      <ScrollReveal direction="none">
+                        <AnimatePresence mode="wait">
+                          {(projectViews[project.title] || (project.title === 'DEVLABYRINTH' ? 'mockup' : 'flow')) === 'flow' ? (
+                            <motion.div
+                              key="flow"
+                              initial={{ opacity: 0, y: 15 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -15 }}
+                              transition={{ duration: 0.35, ease: "easeOut" }}
+                              className="w-full max-w-5xl mx-auto"
+                            >
+                              <ProjectFlowDiagram projectTitle={project.title} />
+                            </motion.div>
+                          ) : project.category === 'mobile' ? (
+                            /* Mobile: clean image, no dark box */
+                            <motion.div
+                              key="mockup-mobile"
+                              initial={{ opacity: 0, y: 15 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -15 }}
+                              transition={{ duration: 0.35, ease: "easeOut" }}
+                              className="relative max-w-xs mx-auto"
+                            >
+                              <img
+                                src={project.imgSrc}
+                                alt={project.title}
+                                className="w-full h-auto object-contain opacity-90 hover:opacity-100 transition-opacity duration-500"
+                              />
+                            </motion.div>
+                          ) : (
+                            /* Web: premium static glow box */
+                            <motion.div
+                              key="mockup-web"
+                              initial={{ opacity: 0, y: 15 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -15 }}
+                              transition={{ duration: 0.35, ease: "easeOut" }}
+                              className="relative aspect-video max-w-lg mx-auto rounded-lg overflow-hidden p-[1px] bg-gradient-to-b from-white/10 to-white/[0.02] hover:from-gold/40 hover:to-gold/10 transition-all duration-500 shadow-xl shadow-black/60 hover:shadow-gold/5"
+                            >
+                              {/* Inner Box */}
+                              <div className="relative w-full h-full bg-[#050505] rounded-sm flex flex-col items-center justify-center gap-4 overflow-hidden z-10">
+                                {/* Static subtle inner border and background */}
+                                <div className="absolute inset-0 bg-white/[0.02] border border-white/5 rounded-sm" />
+
+                                <img
+                                  src={project.imgSrc}
+                                  alt={project.title}
+                                  className="absolute inset-0 z-20 w-full h-full object-contain p-6 opacity-80 hover:opacity-100 transition-opacity duration-500"
+                                />
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </ScrollReveal>
                   </div>
 
-                  <div className="lg:col-span-6">
+                  <div className={`${activeView === 'flow' ? 'lg:col-span-5' : 'lg:col-span-6'} transition-all duration-500`}>
                     <ScrollReveal>
                       <h3 className="font-display text-3xl sm:text-4xl md:text-[5vw] leading-[0.9] text-gold font-bold uppercase mb-6 md:mb-8 tracking-tighter group-hover:scale-[1.02] transition-transform duration-500 origin-left">
                         {project.title}
@@ -756,7 +847,8 @@ export default function App() {
                     </ScrollReveal>
                   </div>
                 </div>
-              ))}
+              );
+            })}
           </div>
         </section>
 

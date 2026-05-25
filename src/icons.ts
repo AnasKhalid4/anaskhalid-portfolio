@@ -14,7 +14,9 @@ import {
   Github,
   Activity,
   Wifi,
-  Server
+  Server,
+  Sun,
+  Moon
 } from "lucide-react";
 
 export { 
@@ -33,5 +35,7 @@ export {
   Github,
   Activity,
   Wifi,
-  Server
+  Server,
+  Sun,
+  Moon
 };
