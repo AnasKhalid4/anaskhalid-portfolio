@@ -229,7 +229,7 @@ export default function ProjectFlowDiagram({ projectTitle }: ProjectFlowDiagramP
   return (
     <>
       {/* Mobile & Tablet Vertical SVG Flow Layout */}
-      <div className="relative w-full aspect-[3/4.2] sm:aspect-[3/3.6] max-w-[480px] mx-auto bg-[#090909]/40 border border-white/5 rounded-xl p-1 overflow-hidden group/diagram select-none" style={{ willChange: 'transform', contain: 'layout style paint' }}>
+      <div className="relative w-full aspect-[3/4.2] sm:aspect-[3/3.6] max-w-[480px] mx-auto bg-[#090909]/40 border border-white/5 rounded-xl p-1 overflow-hidden group/diagram select-none lg:hidden" style={{ willChange: 'transform', contain: 'layout style paint' }}>
         {/* Background radial soft gold glow */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(234,179,8,0.03)_0%,transparent_70%)] pointer-events-none" />
 
