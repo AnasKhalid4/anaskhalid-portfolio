@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Lenis from "lenis";
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
 import * as Icons from "./icons";
@@ -86,29 +86,120 @@ const CustomCursor = () => {
 };
 
 const Preloader = ({ onComplete }: { onComplete: () => void }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let current = 0;
+    const interval = setInterval(() => {
+      // Ease-out curve: fast start, slow finish
+      const increment = Math.max(1, Math.floor((100 - current) / 8));
+      current = Math.min(100, current + increment);
+      setCount(current);
+      if (current >= 100) {
+        clearInterval(interval);
+        setTimeout(onComplete, 600);
+      }
+    }, 60);
+    return () => clearInterval(interval);
+  }, [onComplete]);
+
   return (
     <motion.div
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.8, ease: "easeInOut" }}
-      className="fixed inset-0 z-[200] bg-black flex items-center justify-center px-6"
+      initial={{ y: 0 }}
+      exit={{ y: "-100%" }}
+      transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+      className="fixed inset-0 z-[200] bg-[#0a0a0a] flex flex-col justify-between px-8 md:px-16 py-10 md:py-16"
     >
-      <div className="relative flex items-center justify-center">
-        {/* Base Text */}
-        <h1 className="font-cursive text-5xl md:text-7xl text-white/20 tracking-normal select-none relative pb-2 prsar-8 pl-2">
-          Anas Khalid
-          
-          {/* Fill Text Container */}
-          <motion.div
-            initial={{ width: "0%" }}
-            animate={{ width: "100%" }}
-            transition={{ duration: 2.5, ease: "easeInOut", delay: 0.5 }}
-            onAnimationComplete={onComplete}
-            className="absolute top-0 left-0 h-full overflow-hidden whitespace-nowrap"
+      {/* Top — Branding */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="flex justify-between items-start"
+      >
+        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/30">
+          Portfolio · 2025
+        </span>
+        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/30">
+          Loading
+        </span>
+      </motion.div>
+
+      {/* Center — Name + Counter */}
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <div className="flex flex-col items-start gap-3 relative select-none">
+          {/* First Name with gold dot */}
+          <div className="overflow-hidden">
+            <motion.h1
+              initial={{ y: "110%", rotate: 2 }}
+              animate={{ y: 0, rotate: 0 }}
+              transition={{ duration: 1.1, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              className="font-display font-black text-[13vw] md:text-[7.5vw] text-white uppercase leading-none tracking-[-0.04em] flex items-baseline gap-3"
+            >
+              ANAS
+              <motion.span 
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.95, type: "spring", stiffness: 200 }}
+                className="inline-block w-3.5 h-3.5 md:w-5 md:h-5 bg-gold rounded-full"
+              />
+            </motion.h1>
+          </div>
+
+          {/* Hairline Separator */}
+          <motion.div 
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 1.3, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="w-[28vw] md:w-[15vw] h-px bg-white/20 origin-left"
+          />
+
+          {/* Last Name Offset */}
+          <div className="overflow-hidden pl-[8vw] md:pl-[5vw]">
+            <motion.h1
+              initial={{ y: "110%", rotate: -1 }}
+              animate={{ y: 0, rotate: 0 }}
+              transition={{ duration: 1.1, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="font-display font-black text-[13vw] md:text-[7.5vw] text-transparent uppercase leading-none tracking-[-0.04em]"
+              style={{ WebkitTextStroke: '1.5px rgba(255,255,255,0.4)' }}
+            >
+              KHALID
+            </motion.h1>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom — Progress bar + Counter */}
+      <div className="flex flex-col gap-4">
+        {/* Counter */}
+        <div className="flex justify-between items-baseline">
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40"
           >
-            <span className="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.4)] pr-8 pl-2 inline-block">Anas Khalid</span>
-          </motion.div>
-        </h1>
+            Software Engineer
+          </motion.span>
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className="font-display text-3xl md:text-5xl font-light text-white/90 tabular-nums"
+          >
+            {count}
+          </motion.span>
+        </div>
+
+        {/* Progress bar */}
+        <div className="w-full h-[1px] bg-white/10 overflow-hidden">
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: count / 100 }}
+            transition={{ duration: 0.15, ease: "linear" }}
+            className="h-full bg-white/60 origin-left"
+          />
+        </div>
       </div>
     </motion.div>
   );
@@ -123,6 +214,8 @@ export default function App() {
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 1000], [0, 250]);
   const heroOpacity = useTransform(scrollY, [0, 500], [1, 0]);
+
+
 
   useEffect(() => {
     if (isLoading) return; // Don't start smooth scrolling until loading is done
@@ -273,130 +366,177 @@ export default function App() {
       </AnimatePresence>
 
       <main>
-        {/* Hero Section */}
+        {/* ═══════════════════════════════════════════════════════
+            HERO SECTION — Editorial Split Layout
+            Inspired by Awwwards-winning portfolios:
+            Dennis Snellenberg, Bruno Cisco, Brittany Chiang
+        ═══════════════════════════════════════════════════════ */}
         <section
-          className="hero-full relative flex flex-col justify-center items-center px-6 overflow-hidden bg-black text-white"
+          className="hero-full relative flex flex-col justify-center lg:justify-end overflow-hidden bg-[#e2e2e2] text-black"
           style={{ height: heroHeight }}
         >
-          {/* Fixed V-Shape Grid Background with Electricity Flow */}
-          <div className="absolute inset-0 z-0 bg-black flex justify-center items-center pointer-events-none overflow-hidden">
-            <div
-              className="relative w-full max-w-[1200px] h-full"
-              style={{
-                clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
-                WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 100%)',
-                WebkitMaskRepeat: 'no-repeat',
-              }}
-            >
-              {/* Fully GPU Accelerated Electricity Flows via SVG Masking */}
-              <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  {/* Dim Base Pattern */}
-                  <pattern id="triangle-grid-base" width="120" height="120" patternUnits="userSpaceOnUse">
-                    <path d="M 120 0 L 0 0 0 120 M 0 120 L 120 0" fill="none" stroke="rgba(228, 222, 222, 0.2)" strokeWidth="1.5" />
-                  </pattern>
-                  {/* Bright Glowing Pattern */}
-                  <pattern id="triangle-grid-glow" width="120" height="120" patternUnits="userSpaceOnUse">
-                    <path d="M 120 0 L 0 0 0 120 M 0 120 L 120 0" fill="none" stroke="#ffffff" strokeWidth="2" />
-                  </pattern>
-                  {/* SVG Mask using the Bright Pattern */}
-                  <mask id="grid-mask">
-                    <rect width="100%" height="100%" fill="url(#triangle-grid-glow)" />
-                  </mask>
-                  <radialGradient id="glow-grad">
-                    <stop offset="10%" stopColor="#ffffff" />
-                    <stop offset="70%" stopColor="transparent" />
-                  </radialGradient>
-                </defs>
+          {/* Subtle noise texture overlay for editorial feel */}
+          <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
+              backgroundRepeat: 'repeat',
+            }}
+          />
 
-                {/* Dim Base Grid (Stationary) */}
-                <rect width="100%" height="100%" fill="url(#triangle-grid-base)" />
-
-                {/* Masked Glowing Orbs (Electricity) */}
-                <g mask="url(#grid-mask)">
-                  {/* Flow 1 */}
-                  <motion.circle
-                    cx="0" cy="0" r="150" fill="url(#glow-grad)"
-                    animate={{ x: [-300, 1500], y: [-300, 1500] }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                    style={{ willChange: "transform" }}
-                  />
-                  {/* Flow 2 */}
-                  <motion.circle
-                    cx="0" cy="0" r="200" fill="url(#glow-grad)"
-                    animate={{ x: [1500, -300], y: [-300, 1500] }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                    style={{ willChange: "transform" }}
-                  />
-                  {/* Flow 3 */}
-                  <motion.circle
-                    cx="0" cy="0" r="175" fill="url(#glow-grad)"
-                    animate={{ x: [600, 600], y: [-300, 1500] }}
-                    transition={{ duration: 7, repeat: Infinity, ease: "linear", delay: 2 }}
-                    style={{ willChange: "transform" }}
-                  />
-                </g>
-              </svg>
-            </div>
-          </div>
-
-
-
-          {/* Central Typographic Cinematic Core */}
+          {/* Top bar — availability + location */}
           <motion.div
-            className="relative z-20 flex flex-col items-center justify-center max-w-6xl text-center pointer-events-none mt-12"
-            style={{ y: heroY, opacity: heroOpacity, willChange: "transform, opacity" }}
-          >
-
-            {/* Giant Modern Cinematic Heading */}
-            <h1 className="font-display text-[18vw] sm:text-[11vw] lg:text-[9vw] font-black leading-[0.8] tracking-tighter uppercase text-white select-none">
-              <motion.span
-                initial={{ opacity: 0, y: 25 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="block bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/40"
-              >
-                ANAS KHALID
-              </motion.span>
-            </h1>
-
-            {/* Futuristic Subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.45 }}
-              className="font-mono text-[12px] sm:text-[14px] md:text-[16px] uppercase tracking-[0.2em] text-white/60 max-w-4xl mt-8 px-6 leading-relaxed"
-            >
-              Building high-performance IoT telemetry networks, intelligent AI pipelines, and premium web & mobile ecosystems.
-            </motion.p>
-
-
-          </motion.div>
-
-          {/* Absolute Bottom HUD elements */}
-          <motion.div
-            className="absolute bottom-8 left-0 w-full z-20 px-6 md:px-10 flex justify-between items-end pointer-events-none"
+            className="absolute top-0 left-0 w-full z-30 px-6 md:px-10 pt-28 md:pt-32"
             style={{ opacity: heroOpacity }}
           >
-            {/* LinkedIn social overlay */}
-            <div className="pointer-events-auto hidden sm:block">
-              <a 
-                href="https://www.linkedin.com/in/anas-khalid1/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-widest text-white/40 hover:text-white transition-colors cursor-pointer group"
+            <div className="flex justify-between items-start">
+              {/* Left — Role */}
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="hidden md:block"
               >
-                <Icons.Linkedin size={14} className="text-white/40 group-hover:text-gold transition-colors" />
-                <span>LinkedIn</span>
+                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-black/55 leading-relaxed">
+                  Software Engineer<br />
+                  <span className="text-black/70">IoT · AI · Full Stack</span>
+                </p>
+              </motion.div>
+
+            </div>
+          </motion.div>
+
+          {/* ── Main Hero Content ── */}
+          <motion.div
+            className="relative z-20 w-full px-6 md:px-10 pt-20 lg:pt-0 pb-10 lg:pb-16"
+            style={{ y: heroY, opacity: heroOpacity, willChange: "transform, opacity" }}
+          >
+            {/* Thin horizontal rule above name */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full h-px bg-black/15 mb-8 md:mb-12 origin-left"
+            />
+
+            {/* Split Layout — Name left, subtitle right */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-end">
+              
+              {/* LEFT — Giant Name Typography */}
+              <div className="lg:col-span-8">
+                <h1 className="font-display font-black uppercase select-none leading-[0.82] tracking-[-0.04em] text-left">
+                  {/* First name */}
+                  <span className="block overflow-hidden">
+                    <motion.span
+                      initial={{ y: "110%" }}
+                      animate={{ y: 0 }}
+                      transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                      className="block text-[15vw] sm:text-[12vw] md:text-[10vw] lg:text-[8.5vw] text-black"
+                    >
+                      Anas
+                    </motion.span>
+                  </span>
+                  {/* Last name — outlined stroke */}
+                  <span className="block overflow-hidden mt-3 lg:mt-0">
+                    <motion.span
+                      initial={{ y: "110%" }}
+                      animate={{ y: 0 }}
+                      transition={{ duration: 1, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                      className="block text-[15vw] sm:text-[12vw] md:text-[10vw] lg:text-[8.5vw] text-transparent hero-stroke-dark"
+                    >
+                      Khalid
+                    </motion.span>
+                  </span>
+                </h1>
+              </div>
+
+              {/* RIGHT — Subtitle + CTA (aligned to bottom) */}
+              <div className="lg:col-span-4 flex flex-col items-start justify-end gap-8 lg:gap-10 pb-1 md:pb-2">
+                {/* Subtitle paragraph */}
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.9, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                  className="text-black/60 text-sm md:text-[15px] font-light leading-[1.7] max-w-sm text-left"
+                >
+                  I craft high-performance <span className="text-black/90 font-medium">IoT platforms</span>, intelligent <span className="text-black/90 font-medium">AI systems</span>, and scalable <span className="text-black/90 font-medium">web & mobile</span> products — engineered for impact.
+                </motion.p>
+
+                {/* CTA Row */}
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  className="flex items-center gap-6"
+                >
+                  <a
+                    href="#work"
+                    className="group relative inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-black border-b border-black/30 pb-2 hover:border-black transition-colors duration-300"
+                  >
+                    Selected Work
+                    <svg
+                      className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
+                      fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                  </a>
+                  <a
+                    href="mailto:anaskhalid40400@gmail.com"
+                    className="font-mono text-[11px] uppercase tracking-[0.2em] text-black/55 hover:text-black transition-colors duration-300"
+                  >
+                    Get in Touch
+                  </a>
+                </motion.div>
+              </div>
+            </div>
+
+            {/* Bottom bar — socials left, scroll right */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 1.0 }}
+              className="flex justify-between items-center mt-8 md:mt-12 pt-6 border-t border-black/[0.12]"
+            >
+              {/* Social links */}
+              <div className="flex items-center gap-6 pointer-events-auto">
+                <a 
+                  href="https://www.linkedin.com/in/anas-khalid1/" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-black/50 hover:text-black transition-colors duration-300 group"
+                >
+                  <Icons.Linkedin size={13} className="group-hover:text-black transition-colors" />
+                  <span className="hidden sm:inline">LinkedIn</span>
+                </a>
+                <a 
+                  href="https://github.com/AnasKhalid4" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-black/35 hover:text-black transition-colors duration-300 group"
+                >
+                  <Icons.Github size={13} className="group-hover:text-black transition-colors" />
+                  <span className="hidden sm:inline">GitHub</span>
+                </a>
+              </div>
+
+              {/* Scroll indicator */}
+              <a
+                href="#about"
+                className="group flex items-center gap-3 pointer-events-auto cursor-pointer"
+              >
+                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-black/45 group-hover:text-black/70 transition-colors">
+                  Explore my work
+                </span>
+                <motion.div
+                  animate={{ y: [0, 4, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <svg className="w-3 h-3 text-black/45 group-hover:text-black/70 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path d="M19 14l-7 7m0 0l-7-7" />
+                  </svg>
+                </motion.div>
               </a>
-            </div>
-
-
-
-            {/* Coordinates HUD overlay */}
-            <div className="font-mono text-[9px] uppercase tracking-widest text-white/30 text-right hidden sm:block">
-              [ SYS_STATUS: ACTIVE // PING: 14MS ]
-            </div>
+            </motion.div>
           </motion.div>
         </section>
 
@@ -676,7 +816,7 @@ export default function App() {
             </div>
           </ScrollReveal>
 
-          <div className="flex flex-col gap-20 md:gap-32">
+          <div className="flex flex-col gap-20 md:gap-32" style={{ contentVisibility: 'auto' }}>
             {[
               {
                 title: "ALTAYRA",
@@ -731,7 +871,7 @@ export default function App() {
               .map((project, i) => {
                 const activeView = projectViews[project.title] || (project.title === 'DEVLABYRINTH' ? 'mockup' : 'flow');
                 return (
-                  <div key={project.title} className="group relative grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center">
+                  <div key={project.title} className="group relative grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 500px' }}>
                   <div className={`${activeView === 'flow' ? 'lg:col-span-7' : 'lg:col-span-6'} ${i % 2 !== 0 ? 'lg:order-last' : ''} transition-all duration-500`}>
                       {project.title !== "DEVLABYRINTH" && (
                         <div className="flex justify-between items-center mb-4 max-w-lg mx-auto">
@@ -800,6 +940,7 @@ export default function App() {
                               exit={{ opacity: 0, y: -15 }}
                               transition={{ duration: 0.35, ease: "easeOut" }}
                               className="relative aspect-video max-w-lg mx-auto rounded-lg overflow-hidden p-[1px] bg-gradient-to-b from-white/10 to-white/[0.02] hover:from-gold/40 hover:to-gold/10 transition-all duration-500 shadow-xl shadow-black/60 hover:shadow-gold/5"
+                              style={{ willChange: 'transform', transform: 'translateZ(0)' }}
                             >
                               {/* Inner Box */}
                               <div className="relative w-full h-full bg-[#050505] rounded-sm flex flex-col items-center justify-center gap-4 overflow-hidden z-10">

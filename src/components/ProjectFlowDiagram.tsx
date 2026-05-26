@@ -265,7 +265,7 @@ export default function ProjectFlowDiagram({ projectTitle }: ProjectFlowDiagramP
                   strokeWidth="1.5"
                   className="group-hover/diagram:stroke-gold/20 transition-colors duration-500"
                 />
-                <circle r="2.5" fill="#ffffff" filter="url(#gold-glow-mobile)">
+                <circle r="2.5" fill="#ffffff" opacity="0.9">
                   <animateMotion
                     path={path}
                     dur={`${2.6 + index * 0.3}s`}
@@ -273,7 +273,7 @@ export default function ProjectFlowDiagram({ projectTitle }: ProjectFlowDiagramP
                     begin={`${index * 0.5}s`}
                   />
                 </circle>
-                <circle r="1.5" fill="#EAB308" filter="url(#gold-glow-mobile)">
+                <circle r="1.5" fill="#EAB308" opacity="0.8">
                   <animateMotion
                     path={path}
                     dur={`${2.6 + index * 0.3}s`}
@@ -293,7 +293,7 @@ export default function ProjectFlowDiagram({ projectTitle }: ProjectFlowDiagramP
             stroke="rgba(234,179,8,0.15)"
             strokeWidth="2"
           />
-          <circle r="3" fill="#ffffff" filter="url(#gold-glow-mobile)">
+          <circle r="3" fill="#ffffff" opacity="0.9">
             <animateMotion
               path="M 300 260 L 300 290"
               dur="1s"
@@ -308,7 +308,7 @@ export default function ProjectFlowDiagram({ projectTitle }: ProjectFlowDiagramP
             stroke="rgba(234,179,8,0.15)"
             strokeWidth="2"
           />
-          <circle r="3" fill="#ffffff" filter="url(#gold-glow-mobile)">
+          <circle r="3" fill="#ffffff" opacity="0.9">
             <animateMotion
               path="M 300 370 L 300 400"
               dur="1s"
@@ -333,7 +333,7 @@ export default function ProjectFlowDiagram({ projectTitle }: ProjectFlowDiagramP
                   strokeWidth="1.5"
                   className="group-hover/diagram:stroke-gold/20 transition-colors duration-500"
                 />
-                <circle r="2.5" fill="#ffffff" filter="url(#gold-glow-mobile)">
+                <circle r="2.5" fill="#ffffff" opacity="0.9">
                   <animateMotion
                     path={path}
                     dur={`${2.6 + index * 0.3}s`}
@@ -341,7 +341,7 @@ export default function ProjectFlowDiagram({ projectTitle }: ProjectFlowDiagramP
                     begin={`${index * 0.5 + 0.3}s`}
                   />
                 </circle>
-                <circle r="1.5" fill="#EAB308" filter="url(#gold-glow-mobile)">
+                <circle r="1.5" fill="#EAB308" opacity="0.8">
                   <animateMotion
                     path={path}
                     dur={`${2.6 + index * 0.3}s`}
@@ -504,7 +504,7 @@ export default function ProjectFlowDiagram({ projectTitle }: ProjectFlowDiagramP
                   />
 
                   {/* Moving Glowing Flow Packets / Particles */}
-                  <circle r="2.5" fill="#ffffff" filter="url(#gold-glow)">
+                  <circle r="2.5" fill="#ffffff" opacity="0.9">
                     <animateMotion
                       path={path}
                       dur={`${2.8 + index * 0.4}s`}
@@ -512,7 +512,7 @@ export default function ProjectFlowDiagram({ projectTitle }: ProjectFlowDiagramP
                       begin={`${index * 0.6}s`}
                     />
                   </circle>
-                  <circle r="1.5" fill="#EAB308" filter="url(#gold-glow)">
+                  <circle r="1.5" fill="#EAB308" opacity="0.8">
                     <animateMotion
                       path={path}
                       dur={`${2.8 + index * 0.4}s`}
@@ -533,7 +533,7 @@ export default function ProjectFlowDiagram({ projectTitle }: ProjectFlowDiagramP
               strokeWidth="2"
               className="group-hover/diagram:stroke-gold/30 transition-colors duration-500"
             />
-            <circle r="3" fill="#ffffff" filter="url(#gold-glow)">
+            <circle r="3" fill="#ffffff" opacity="0.9">
               <animateMotion
                 path="M 350 200 L 380 200"
                 dur="1.2s"
@@ -549,7 +549,7 @@ export default function ProjectFlowDiagram({ projectTitle }: ProjectFlowDiagramP
               strokeWidth="2"
               className="group-hover/diagram:stroke-gold/30 transition-colors duration-500"
             />
-            <circle r="3" fill="#ffffff" filter="url(#gold-glow)">
+            <circle r="3" fill="#ffffff" opacity="0.9">
               <animateMotion
                 path="M 520 200 L 550 200"
                 dur="1.2s"
@@ -573,7 +573,7 @@ export default function ProjectFlowDiagram({ projectTitle }: ProjectFlowDiagramP
                   />
 
                   {/* Moving Glowing Flow Packets / Particles */}
-                  <circle r="2.5" fill="#ffffff" filter="url(#gold-glow)">
+                  <circle r="2.5" fill="#ffffff" opacity="0.9">
                     <animateMotion
                       path={path}
                       dur={`${2.8 + index * 0.3}s`}
@@ -581,7 +581,7 @@ export default function ProjectFlowDiagram({ projectTitle }: ProjectFlowDiagramP
                       begin={`${index * 0.5 + 0.3}s`}
                     />
                   </circle>
-                  <circle r="1.5" fill="#EAB308" filter="url(#gold-glow)">
+                  <circle r="1.5" fill="#EAB308" opacity="0.8">
                     <animateMotion
                       path={path}
                       dur={`${2.8 + index * 0.3}s`}
