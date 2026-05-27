@@ -927,7 +927,7 @@ export default function App() {
                             >
                               <img
                                 src={project.imgSrc}
-                                alt={project.title}
+                                alt={`${project.title} - Software Engineering Project by Anas Khalid`}
                                 className="w-full h-auto object-contain opacity-90 hover:opacity-100 transition-opacity duration-500"
                               />
                             </motion.div>
@@ -949,7 +949,7 @@ export default function App() {
 
                                 <img
                                   src={project.imgSrc}
-                                  alt={project.title}
+                                  alt={`${project.title} - Enterprise System Architecture by Anas Khalid`}
                                   className="absolute inset-0 z-20 w-full h-full object-contain p-6 opacity-80 hover:opacity-100 transition-opacity duration-500"
                                 />
                               </div>

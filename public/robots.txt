@@ -1,0 +1,7 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Host & Sitemap
+Host: https://anaskhalid.site
+Sitemap: https://anaskhalid.site/sitemap.xml
