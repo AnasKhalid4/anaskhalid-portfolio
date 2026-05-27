@@ -43,11 +43,14 @@ import {
   Bell,
   Camera,
   Barcode,
-  Grid
+  Grid,
+  Lock,
+  Compass,
+  Users
 } from "lucide-react";
 
 // Project specific type definitions
-export type ProjectTitle = "ALTAYRA" | "MEDICAL FITNESS PROS" | "CRONOTAX" | "NOURYX" | "CALORIS";
+export type ProjectTitle = "ALTAYRA" | "MEDICAL FITNESS PROS" | "CRONOTAX" | "NOURYX" | "CALORIS" | "5TH ELEMENT BIO";
 
 interface FlowNode {
   label: string;
@@ -66,24 +69,24 @@ interface ProjectFlowData {
 const FLOW_DATA: Record<ProjectTitle, ProjectFlowData> = {
   "ALTAYRA": {
     inputs: [
-      { label: "IoT Devices", icon: Barcode },
-      { label: "GPS Telemetry", icon: Wifi },
-      { label: "Customer Requests", icon: MessageSquare },
-      { label: "Geofence Zones", icon: Scan }
+      { label: "Technician Login", icon: Lock },
+      { label: "Inbuild Navigation", icon: Compass },
+      { label: "View Equipment", icon: Eye },
+      { label: "Check Device Link", icon: Link }
     ],
     processing: {
-      engineName: "ALTAYRA CORE",
+      engineName: "WORK ORDER SYSTEM",
       subNodes: [
-        { icon: Server, label: "NestJS Backend" },
-        { icon: Layers, label: "Pipeline Router" },
-        { icon: Database, label: "Supabase DB" }
+        { icon: Clipboard, label: "Assign Work Order" },
+        { icon: Settings, label: "Assign/Detach IoT" },
+        { icon: Database, label: "Active Task Router" }
       ]
     },
     outputs: [
-      { label: "Technician App", icon: Smartphone },
-      { label: "Quote & Orders", icon: DollarSign },
-      { label: "Insights Dash", icon: TrendingUp },
-      { label: "Email Alerts", icon: Bell }
+      { label: "Complete Tasks", icon: ShieldCheck },
+      { label: "Close Work Order", icon: FileText },
+      { label: "Equipment Visuals", icon: Monitor },
+      { label: "Automated Reports", icon: Bell }
     ]
   },
   "MEDICAL FITNESS PROS": {
@@ -172,6 +175,28 @@ const FLOW_DATA: Record<ProjectTitle, ProjectFlowData> = {
       { label: "Macro Charts", icon: Grid },
       { label: "Meal History", icon: Clipboard },
       { label: "Push Alerts", icon: Bell }
+    ]
+  },
+  "5TH ELEMENT BIO": {
+    inputs: [
+      { label: "Multi-Role Signup", icon: Users },
+      { label: "Price Bid Request", icon: DollarSign },
+      { label: "B2B Order Ingest", icon: FileText },
+      { label: "Stripe Checkout", icon: CreditCard }
+    ],
+    processing: {
+      engineName: "RBAC & TENANT PIPELINE",
+      subNodes: [
+        { icon: ShieldCheck, label: "Onboarding Gates" },
+        { icon: Lock, label: "Private Pricing Matrix" },
+        { icon: Server, label: "Manufacturer Panel" }
+      ]
+    },
+    outputs: [
+      { label: "Distributor Dashboard", icon: Grid },
+      { label: "Mfg Order Route", icon: Activity },
+      { label: "Commission Tracker", icon: TrendingUp },
+      { label: "Dynamic Invoices", icon: Mail }
     ]
   }
 };

@@ -15,6 +15,12 @@ import cronotaxImg from '../assets/cronotax.png';
 import devlabyrinthImg from '../assets/devlabyrinth.png';
 import nouryxImg from '../assets/nouryx.png';
 import calorisImg from '../assets/caloris.png';
+import medtekImg from '../assets/medtek.png';
+import sevenkingsImg from '../assets/sevenkings.png';
+import metrolabsImg from '../assets/metrolabs.png';
+import fiveelementImg from '../assets/fiveelement.png';
+import altayraAppImg from '../assets/altayra_app.png';
+
 
 const ICON_SIZE = 20;
 
@@ -118,7 +124,7 @@ const Preloader = ({ onComplete }: { onComplete: () => void }) => {
         className="flex justify-between items-start"
       >
         <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/30">
-          Portfolio · 2025
+          Portfolio
         </span>
         <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/30">
           Loading
@@ -472,7 +478,7 @@ export default function App() {
                     href="#work"
                     className="group relative inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-black border-b border-black/30 pb-2 hover:border-black transition-colors duration-300"
                   >
-                    Selected Work
+                    My Work
                     <svg
                       className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
                       fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"
@@ -827,6 +833,22 @@ export default function App() {
                 category: 'web' as const
               },
               {
+                title: "CRONOTAX",
+                desc: "AI-powered tax automation platform built with Next.js and Supabase, utilizing Gemini AI for intelligent document analysis and processing.",
+                tech: ["Next.js", "Supabase", "Gemini AI", "Tailwind CSS"],
+                imgSrc: cronotaxImg,
+                link: "https://cronotax-web-production.up.railway.app/",
+                category: 'web' as const
+              },
+              {
+                title: "5TH ELEMENT BIO",
+                desc: "Premium B2C & B2B peptide distribution platform built with Next.js and Stripe. Implements granular role-based access control (Super Admin, Sub-Admin, Manufacturer, Distributor, Service Provider), private customized pricing agreements, and a multi-tenant order fulfillment workflow.",
+                tech: ["Next.js", "Stripe", "RBAC", "Multi-Tenant Architecture"],
+                imgSrc: fiveelementImg,
+                link: "https://5thelementbio.com/",
+                category: 'web' as const
+              },
+              {
                 title: "MEDICAL FITNESS PROS",
                 desc: "End-to-end AI movement assessment platform utilizing a multimodal LLM pipeline to generate clinical-grade reports and custom workout plans.",
                 tech: ["Next.js", "Supabase", "OpenAI & Gemini", "RAG", "Tailwind CSS"],
@@ -835,11 +857,35 @@ export default function App() {
                 category: 'web' as const
               },
               {
-                title: "CRONOTAX",
-                desc: "AI-powered tax automation platform built with Next.js and Supabase, utilizing Gemini AI for intelligent document analysis and processing.",
-                tech: ["Next.js", "Supabase", "Gemini AI", "Tailwind CSS"],
-                imgSrc: cronotaxImg,
-                link: "https://cronotax-web-production.up.railway.app/",
+                title: "NOURYX",
+                desc: "Premium online booking platform for top-tier beauty salons, spas, and barbers across France, featuring real-time availability and secure payments.",
+                tech: ["Next.js", "Firebase", "Stripe", "Tailwind CSS"],
+                imgSrc: nouryxImg,
+                link: "https://nouryx.com/",
+                category: 'web' as const
+              },
+              {
+                title: "MEDTEK SERVICES",
+                desc: "Medical billing, credentialing, and healthcare administrative solutions platform optimizing revenue cycle management and workflow operations for multi-specialty clinical practices.",
+                tech: ["Next.js", "Tailwind CSS", "SEO", "Responsive Design"],
+                imgSrc: medtekImg,
+                link: "https://medtekservices.com/",
+                category: 'web' as const
+              },
+              {
+                title: "7 KINGS MARKETING",
+                desc: "High-impact digital marketing and brand strategy agency platform delivering bespoke advertising solutions, high-performance lead generation campaigns, and premium UI designs.",
+                tech: ["Next.js", "Tailwind CSS", "Framer Motion", "Agency Solutions"],
+                imgSrc: sevenkingsImg,
+                link: "https://7kingsmarketing.com/",
+                category: 'web' as const
+              },
+              {
+                title: "METRO LABS BIO",
+                desc: "Scientific biotechnology research and diagnostics portal showcasing innovative laboratory services, testing suites, research pipelines, and comprehensive clinical healthcare analytics.",
+                tech: ["Next.js", "Tailwind CSS", "Microdata Schema", "Medical Analytics"],
+                imgSrc: metrolabsImg,
+                link: "https://metrolabsbio.com/",
                 category: 'web' as const
               },
               {
@@ -851,12 +897,12 @@ export default function App() {
                 category: 'web' as const
               },
               {
-                title: "NOURYX",
-                desc: "Premium online booking platform for top-tier beauty salons, spas, and barbers across France, featuring real-time availability and secure payments.",
-                tech: ["Next.js", "Firebase", "Stripe", "Tailwind CSS"],
-                imgSrc: nouryxImg,
-                link: "https://nouryx.com/",
-                category: 'web' as const
+                title: "ALTAYRA MOBILE",
+                desc: "Enterprise IoT tracking application allowing real-time asset monitoring, technician dispatch, geofenced alerts, and mobile synchronization.",
+                tech: ["React Native", "Expo", "GPS", "IoT Real-time", "App Store"],
+                imgSrc: altayraAppImg,
+                link: "https://apps.apple.com/us/app/altayra/id6763271344",
+                category: 'mobile' as const
               },
               {
                 title: "CALORIS",
@@ -869,18 +915,19 @@ export default function App() {
             ]
               .filter(p => p.category === activeTab)
               .map((project, i) => {
-                const activeView = projectViews[project.title] || (project.title === 'DEVLABYRINTH' ? 'mockup' : 'flow');
+                const hasDiagram = ["ALTAYRA", "ALTAYRA MOBILE", "5TH ELEMENT BIO", "MEDICAL FITNESS PROS", "CRONOTAX", "NOURYX", "CALORIS"].includes(project.title);
+                const activeView = projectViews[project.title] || (hasDiagram ? 'flow' : 'mockup');
                 return (
                   <div key={project.title} className="group relative grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 500px' }}>
                   <div className={`${activeView === 'flow' ? 'lg:col-span-7' : 'lg:col-span-6'} ${i % 2 !== 0 ? 'lg:order-last' : ''} transition-all duration-500`}>
-                      {project.title !== "DEVLABYRINTH" && (
+                      {hasDiagram && (
                         <div className="flex justify-between items-center mb-4 max-w-lg mx-auto">
                           <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/30">System Visualizer</span>
                           <div className="flex items-center gap-1.5 bg-black/40 border border-white/10 p-0.5 rounded-full select-none">
                             <button
                               onClick={() => setProjectViews(prev => ({ ...prev, [project.title]: 'mockup' }))}
                               className={`px-3.5 py-1.5 rounded-full font-mono text-[8px] sm:text-[9px] uppercase tracking-widest transition-all duration-300 cursor-pointer ${
-                                (projectViews[project.title] || (project.title === 'DEVLABYRINTH' ? 'mockup' : 'flow')) === 'mockup'
+                                activeView === 'mockup'
                                   ? 'bg-white text-black font-semibold'
                                   : 'text-white/40 hover:text-white'
                               }`}
@@ -890,13 +937,13 @@ export default function App() {
                             <button
                               onClick={() => setProjectViews(prev => ({ ...prev, [project.title]: 'flow' }))}
                               className={`px-3.5 py-1.5 rounded-full font-mono text-[8px] sm:text-[9px] uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center gap-1.5 ${
-                                (projectViews[project.title] || (project.title === 'DEVLABYRINTH' ? 'mockup' : 'flow')) === 'flow'
+                                activeView === 'flow'
                                   ? 'bg-gold text-black font-semibold shadow-[0_0_10px_rgba(234,179,8,0.3)]'
                                   : 'text-white/40 hover:text-white'
                               }`}
                             >
                               System Flow
-                              <span className={`inline-block w-1.5 h-1.5 rounded-full ${(projectViews[project.title] || (project.title === 'DEVLABYRINTH' ? 'mockup' : 'flow')) === 'flow' ? 'bg-black animate-ping' : 'bg-gold/60'}`} />
+                              <span className={`inline-block w-1.5 h-1.5 rounded-full ${activeView === 'flow' ? 'bg-black animate-ping' : 'bg-gold/60'}`} />
                             </button>
                           </div>
                         </div>
@@ -904,7 +951,7 @@ export default function App() {
 
                       <ScrollReveal direction="none">
                         <AnimatePresence mode="wait">
-                          {(projectViews[project.title] || (project.title === 'DEVLABYRINTH' ? 'mockup' : 'flow')) === 'flow' ? (
+                          {activeView === 'flow' ? (
                             <motion.div
                               key="flow"
                               initial={{ opacity: 0, y: 15 }}
