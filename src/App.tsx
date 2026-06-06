@@ -5,7 +5,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Lenis from "lenis";
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring, animate } from "motion/react";
 import * as Icons from "./icons";
 import ScrollReveal from "./components/ScrollReveal";
 import ProjectFlowDiagram from "./components/ProjectFlowDiagram";
@@ -93,81 +93,124 @@ const CustomCursor = () => {
 
 const Preloader = ({ onComplete }: { onComplete: () => void }) => {
   const [count, setCount] = useState(0);
+  const motionCount = useMotionValue(0);
 
   useEffect(() => {
-    let current = 0;
-    const interval = setInterval(() => {
-      // Ease-out curve: fast start, slow finish
-      const increment = Math.max(1, Math.floor((100 - current) / 8));
-      current = Math.min(100, current + increment);
-      setCount(current);
-      if (current >= 100) {
-        clearInterval(interval);
-        setTimeout(onComplete, 600);
+    // Listen to value changes to update local display count
+    const unsubscribe = motionCount.onChange((latest) => {
+      setCount(Math.round(latest));
+    });
+
+    const controls = animate(motionCount, 100, {
+      duration: 2.8, // 2.8 seconds loading time for smooth showcase
+      ease: [0.16, 1, 0.3, 1], // beautiful custom ease-out
+      onComplete: () => {
+        // Wait a brief moment before triggering the slide-up
+        setTimeout(onComplete, 400);
       }
-    }, 60);
-    return () => clearInterval(interval);
-  }, [onComplete]);
+    });
+
+    return () => {
+      unsubscribe();
+      controls.stop();
+    };
+  }, [motionCount, onComplete]);
+
+  const progressPercent = count / 100;
 
   return (
     <motion.div
-      initial={{ y: 0 }}
-      exit={{ y: "-100%" }}
-      transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
-      className="fixed inset-0 z-[200] bg-[#0a0a0a] flex flex-col justify-between px-8 md:px-16 py-10 md:py-16"
+      initial={{ opacity: 1, y: 0 }}
+      exit={{ 
+        y: "-100%",
+        transition: { duration: 1.2, ease: [0.85, 0, 0.15, 1] } // ultra smooth ease-in-out curve
+      }}
+      className="fixed inset-0 z-[200] bg-[#050505] flex flex-col justify-between px-6 md:px-12 py-8 md:py-12 overflow-hidden select-none"
     >
-      {/* Top — Branding */}
+      {/* Ambient background glows that charge up with the loading percentage */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        {/* Left blue glow */}
+        <div 
+          className="absolute -left-[10%] top-[20%] w-[60%] h-[60%] rounded-full bg-[#006DFF] opacity-0 blur-[120px] transition-all duration-500"
+          style={{ 
+            opacity: progressPercent * 0.25, 
+            transform: `scale(${0.8 + progressPercent * 0.4})` 
+          }} 
+        />
+        {/* Right orange glow */}
+        <div 
+          className="absolute -right-[10%] top-[20%] w-[60%] h-[60%] rounded-full bg-[#FF5A00] opacity-0 blur-[120px] transition-all duration-500"
+          style={{ 
+            opacity: progressPercent * 0.2, 
+            transform: `scale(${0.8 + progressPercent * 0.4})` 
+          }} 
+        />
+        {/* Top purple glow */}
+        <div 
+          className="absolute left-[20%] -top-[10%] w-[60%] h-[60%] rounded-full bg-[rgba(168,85,247,0.5)] opacity-0 blur-[120px] transition-all duration-500"
+          style={{ 
+            opacity: progressPercent * 0.15, 
+            transform: `scale(${0.8 + progressPercent * 0.4})` 
+          }} 
+        />
+        {/* Subtle noise texture */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;utf8,<svg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22><filter id=%22noise%22><feTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/></filter><rect width=%22100%%22 height=%22100%%22 filter=%22url(%23noise)%22 opacity=%220.02%22/></svg>')] pointer-events-none opacity-40" />
+      </div>
+
+      {/* Top Header — Branding */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="flex justify-between items-start"
+        transition={{ duration: 0.6 }}
+        className="relative z-10 flex justify-between items-start"
       >
-        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/30">
-          Portfolio
+        <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/40">
+          SYSTEM INITIALIZATION
         </span>
-        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/30">
-          Loading
+        <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/40">
+         
         </span>
       </motion.div>
 
-      {/* Center — Name + Counter */}
-      <div className="flex-1 flex flex-col items-center justify-center">
-        <div className="flex flex-col items-start gap-3 relative select-none">
+      {/* Center Logo / Typographic Composition */}
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center">
+        <div className="flex flex-col items-start gap-4 relative select-none">
           {/* First Name with gold dot */}
           <div className="overflow-hidden">
             <motion.h1
               initial={{ y: "110%", rotate: 2 }}
               animate={{ y: 0, rotate: 0 }}
-              transition={{ duration: 1.1, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display font-black text-[13vw] md:text-[7.5vw] text-white uppercase leading-none tracking-[-0.04em] flex items-baseline gap-3"
+              transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+              className="font-display font-black text-[14vw] md:text-[8vw] text-white uppercase leading-none tracking-[-0.04em] flex items-baseline gap-3 md:gap-5"
             >
               ANAS
-              <motion.span 
+              <motion.span
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ delay: 0.95, type: "spring", stiffness: 200 }}
-                className="inline-block w-3.5 h-3.5 md:w-5 md:h-5 bg-gold rounded-full"
+                transition={{ duration: 0.8, delay: 0.4, type: "spring", stiffness: 200 }}
+                className="inline-block w-4 h-4 md:w-6 md:h-6 bg-gold rounded-full shadow-[0_0_15px_rgba(234,179,8,0.6)] animate-pulse"
               />
             </motion.h1>
           </div>
 
           {/* Hairline Separator */}
-          <motion.div 
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 1.3, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="w-[28vw] md:w-[15vw] h-px bg-white/20 origin-left"
-          />
+          <div className="w-full pr-12 md:pr-24">
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 1.3, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full h-px bg-gradient-to-r from-white/20 via-white/5 to-transparent origin-left"
+            />
+          </div>
 
           {/* Last Name Offset */}
-          <div className="overflow-hidden pl-[8vw] md:pl-[5vw]">
+          <div className="overflow-hidden pl-[10vw] md:pl-[6vw]">
             <motion.h1
               initial={{ y: "110%", rotate: -1 }}
               animate={{ y: 0, rotate: 0 }}
-              transition={{ duration: 1.1, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display font-black text-[13vw] md:text-[7.5vw] text-transparent uppercase leading-none tracking-[-0.04em]"
-              style={{ WebkitTextStroke: '1.5px rgba(255,255,255,0.4)' }}
+              transition={{ duration: 1.1, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="font-display font-black text-[14vw] md:text-[8vw] text-transparent uppercase leading-none tracking-[-0.04em]"
+              style={{ WebkitTextStroke: '1.5px rgba(255,255,255,0.3)' }}
             >
               KHALID
             </motion.h1>
@@ -175,35 +218,46 @@ const Preloader = ({ onComplete }: { onComplete: () => void }) => {
         </div>
       </div>
 
-      {/* Bottom — Progress bar + Counter */}
-      <div className="flex flex-col gap-4">
-        {/* Counter */}
-        <div className="flex justify-between items-baseline">
-          <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-            className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40"
-          >
-            Software Engineer
-          </motion.span>
-          <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-            className="font-display text-3xl md:text-5xl font-light text-white/90 tabular-nums"
-          >
-            {count}
-          </motion.span>
+      {/* Bottom Control / Status Bar */}
+      <div className="relative z-10 flex flex-col gap-6 md:gap-8">
+        {/* Metadata + Counter */}
+        <div className="flex justify-between items-end">
+          <div className="flex flex-col gap-1 text-left">
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/50"
+            >
+              IoT · AI · FULL STACK DEVELOPER
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/30"
+            >
+              PRE-COMPILING RESOURCES...
+            </motion.span>
+          </div>
+          
+          <div className="flex items-baseline">
+            <span className="font-display text-[12vw] md:text-[7vw] font-black tracking-tighter text-white/95 leading-none tabular-nums">
+              {count}
+            </span>
+            <span className="font-display text-[4vw] md:text-[2vw] font-black text-white/40 leading-none ml-1">
+              %
+            </span>
+          </div>
         </div>
 
-        {/* Progress bar */}
-        <div className="w-full h-[1px] bg-white/10 overflow-hidden">
+        {/* Triple Gradient Custom Progress Bar */}
+        <div className="w-full h-[2px] bg-white/5 overflow-hidden rounded-full relative">
           <motion.div
             initial={{ scaleX: 0 }}
-            animate={{ scaleX: count / 100 }}
-            transition={{ duration: 0.15, ease: "linear" }}
-            className="h-full bg-white/60 origin-left"
+            animate={{ scaleX: progressPercent }}
+            transition={{ duration: 0.1, ease: "linear" }}
+            className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-[#006DFF] via-[rgba(168,85,247,0.8)] to-[#FF5A00] origin-left"
           />
         </div>
       </div>
@@ -218,21 +272,20 @@ export default function App() {
   const [projectViews, setProjectViews] = useState<Record<string, 'mockup' | 'flow'>>({});
   const [heroHeight] = useState(() => window.innerHeight);
   const { scrollY } = useScroll();
-  const heroY = useTransform(scrollY, [0, 1000], [0, 250]);
-  const heroOpacity = useTransform(scrollY, [0, 500], [1, 0]);
-
-
+  const smoothScrollY = useSpring(scrollY, { damping: 20, stiffness: 80, mass: 0.5 });
+  const heroY = useTransform(smoothScrollY, [0, 1000], [0, 250]);
+  const heroOpacity = useTransform(smoothScrollY, [0, 500], [1, 0]);
 
   useEffect(() => {
     if (isLoading) return; // Don't start smooth scrolling until loading is done
 
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.5,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       orientation: 'vertical',
       gestureOrientation: 'vertical',
-      wheelMultiplier: 1.0,
+      wheelMultiplier: 0.95,
     });
 
     function raf(time: number) {
@@ -274,14 +327,17 @@ export default function App() {
     <div className={`bg-surface ${isLoading ? 'h-screen overflow-hidden' : ''}`}>
       <AnimatePresence>
         {isLoading && (
-          <Preloader onComplete={() => {
-            setTimeout(() => setIsLoading(false), 400);
-          }} />
+          <Preloader onComplete={() => setIsLoading(false)} />
         )}
       </AnimatePresence>
 
       <CustomCursor />
-      <nav className="fixed top-0 left-0 w-full z-50 px-6 md:px-10 py-8 flex justify-between items-center pointer-events-none mix-blend-difference text-white">
+      <motion.nav 
+        initial={{ opacity: 0, y: -20 }}
+        animate={!isLoading ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+        transition={{ duration: 1.0, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed top-0 left-0 w-full z-50 px-6 md:px-10 py-8 flex justify-between items-center pointer-events-none text-white"
+      >
         <div className="font-cursive text-3xl md:text-5xl tracking-normal pointer-events-auto select-none">Anas Khalid</div>
 
         <div className="flex items-center gap-4 pointer-events-auto">
@@ -296,7 +352,7 @@ export default function App() {
             MENU
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Mobile Menu */}
       <AnimatePresence>
@@ -378,65 +434,63 @@ export default function App() {
             Dennis Snellenberg, Bruno Cisco, Brittany Chiang
         ═══════════════════════════════════════════════════════ */}
         <section
-          className="hero-full relative flex flex-col justify-center lg:justify-end overflow-hidden bg-[#e2e2e2] text-black"
+          className="hero-full relative flex flex-col justify-end overflow-hidden bg-surface text-white"
           style={{ height: heroHeight }}
         >
+          {/* Hero Background Image Container with full-screen object-cover behavior */}
+          <div className="absolute inset-0 z-0 overflow-hidden">
+            <motion.img
+              initial={{ scale: 1.15, filter: "blur(4px)" }}
+              animate={!isLoading ? { scale: 1, filter: "blur(0px)" } : { scale: 1.15, filter: "blur(4px)" }}
+              transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+              src="/hero-image.webp"
+              alt="Anas Khalid"
+              className="w-full h-full object-cover"
+            />
+            {/* Soft bottom fade to blend image into the next section's dark background */}
+            <div className="absolute inset-x-0 bottom-0 h-[20%] bg-gradient-to-t from-[#131313] to-transparent pointer-events-none" />
+            <div className="absolute inset-x-0 top-0 h-[15%] bg-gradient-to-b from-[#131313]/40 to-transparent pointer-events-none" />
+            {/* Readability gradient overlay to ensure high contrast for text */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent pointer-events-none" />
+          </div>
+
           {/* Subtle noise texture overlay for editorial feel */}
-          <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none"
+          <div className="absolute inset-0 z-10 opacity-[0.03] pointer-events-none"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
               backgroundRepeat: 'repeat',
             }}
           />
 
-          {/* Top bar — availability + location */}
           <motion.div
-            className="absolute top-0 left-0 w-full z-30 px-6 md:px-10 pt-28 md:pt-32"
-            style={{ opacity: heroOpacity }}
-          >
-            <div className="flex justify-between items-start">
-              {/* Left — Role */}
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="hidden md:block"
-              >
-                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-black/55 leading-relaxed">
-                  Software Engineer<br />
-                  <span className="text-black/70">IoT · AI · Full Stack</span>
-                </p>
-              </motion.div>
-
-            </div>
-          </motion.div>
-
-          {/* ── Main Hero Content ── */}
-          <motion.div
-            className="relative z-20 w-full px-6 md:px-10 pt-20 lg:pt-0 pb-10 lg:pb-16"
+            variants={{
+              initial: {},
+              animate: {
+                transition: {
+                  staggerChildren: 0.12,
+                  delayChildren: 0.15
+                }
+              }
+            }}
+            initial="initial"
+            animate={isLoading ? "initial" : "animate"}
+            className="relative z-20 w-full px-6 md:px-10 pb-10 lg:pb-16"
             style={{ y: heroY, opacity: heroOpacity, willChange: "transform, opacity" }}
           >
-            {/* Thin horizontal rule above name */}
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full h-px bg-black/15 mb-8 md:mb-12 origin-left"
-            />
 
-            {/* Split Layout — Name left, subtitle right */}
+            {/* Cinematic Left-Aligned Layout — Keeps the right side completely clear for the hero image portrait */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-end">
-              
-              {/* LEFT — Giant Name Typography */}
-              <div className="lg:col-span-8">
+              {/* LEFT — Name */}
+              <div className="lg:col-span-8 flex flex-col items-start">
                 <h1 className="font-display font-black uppercase select-none leading-[0.82] tracking-[-0.04em] text-left">
                   {/* First name */}
                   <span className="block overflow-hidden">
                     <motion.span
-                      initial={{ y: "110%" }}
-                      animate={{ y: 0 }}
-                      transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                      className="block text-[15vw] sm:text-[12vw] md:text-[10vw] lg:text-[8.5vw] text-black"
+                      variants={{
+                        initial: { y: "115%" },
+                        animate: { y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } }
+                      }}
+                      className="block text-[15vw] sm:text-[12vw] md:text-[10vw] lg:text-[7.5vw] text-white"
                     >
                       Anas
                     </motion.span>
@@ -444,10 +498,11 @@ export default function App() {
                   {/* Last name — outlined stroke */}
                   <span className="block overflow-hidden mt-3 lg:mt-0">
                     <motion.span
-                      initial={{ y: "110%" }}
-                      animate={{ y: 0 }}
-                      transition={{ duration: 1, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                      className="block text-[15vw] sm:text-[12vw] md:text-[10vw] lg:text-[8.5vw] text-transparent hero-stroke-dark"
+                      variants={{
+                        initial: { y: "115%" },
+                        animate: { y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } }
+                      }}
+                      className="block text-[15vw] sm:text-[12vw] md:text-[10vw] lg:text-[7.5vw] text-transparent hero-stroke"
                     >
                       Khalid
                     </motion.span>
@@ -455,28 +510,28 @@ export default function App() {
                 </h1>
               </div>
 
-              {/* RIGHT — Subtitle + CTA (aligned to bottom) */}
-              <div className="lg:col-span-4 flex flex-col items-start justify-end gap-8 lg:gap-10 pb-1 md:pb-2">
-                {/* Subtitle paragraph */}
+              {/* RIGHT — Subtitle + CTAs */}
+              <div className="lg:col-span-4 flex flex-col items-start gap-6 pb-2">
                 <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.9, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-black/60 text-sm md:text-[15px] font-light leading-[1.7] max-w-sm text-left"
+                  variants={{
+                    initial: { opacity: 0, y: 20 },
+                    animate: { opacity: 1, y: 0, transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1] } }
+                  }}
+                  className="text-white/70 text-sm md:text-[15px] font-light leading-[1.7] max-w-sm text-left"
                 >
-                  I craft high-performance <span className="text-black/90 font-medium">IoT platforms</span>, intelligent <span className="text-black/90 font-medium">AI systems</span>, and scalable <span className="text-black/90 font-medium">web & mobile</span> products — engineered for impact.
+                  I craft high-performance <span className="text-white font-medium">IoT platforms</span>, intelligent <span className="text-white font-medium">AI systems</span>, and scalable <span className="text-white font-medium">web & mobile</span> products — engineered for impact.
                 </motion.p>
 
-                {/* CTA Row */}
                 <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  variants={{
+                    initial: { opacity: 0, y: 15 },
+                    animate: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+                  }}
                   className="flex items-center gap-6"
                 >
                   <a
                     href="#work"
-                    className="group relative inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-black border-b border-black/30 pb-2 hover:border-black transition-colors duration-300"
+                    className="group relative inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-white border-b border-white/30 pb-2 hover:border-white transition-colors duration-300"
                   >
                     My Work
                     <svg
@@ -488,7 +543,7 @@ export default function App() {
                   </a>
                   <a
                     href="mailto:anaskhalid40400@gmail.com"
-                    className="font-mono text-[11px] uppercase tracking-[0.2em] text-black/55 hover:text-black transition-colors duration-300"
+                    className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/60 hover:text-white transition-colors duration-300"
                   >
                     Get in Touch
                   </a>
@@ -498,29 +553,30 @@ export default function App() {
 
             {/* Bottom bar — socials left, scroll right */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 1.0 }}
-              className="flex justify-between items-center mt-8 md:mt-12 pt-6 border-t border-black/[0.12]"
+              variants={{
+                initial: { opacity: 0, y: 10 },
+                animate: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+              }}
+              className="flex justify-between items-center mt-8 md:mt-12 pt-6 border-t border-white/10"
             >
               {/* Social links */}
               <div className="flex items-center gap-6 pointer-events-auto">
-                <a 
-                  href="https://www.linkedin.com/in/anas-khalid1/" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-black/50 hover:text-black transition-colors duration-300 group"
+                <a
+                  href="https://www.linkedin.com/in/anas-khalid1/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-white/50 hover:text-white transition-colors duration-300 group"
                 >
-                  <Icons.Linkedin size={13} className="group-hover:text-black transition-colors" />
+                  <Icons.Linkedin size={13} className="group-hover:text-white transition-colors" />
                   <span className="hidden sm:inline">LinkedIn</span>
                 </a>
-                <a 
-                  href="https://github.com/AnasKhalid4" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-black/35 hover:text-black transition-colors duration-300 group"
+                <a
+                  href="https://github.com/AnasKhalid4"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-white/35 hover:text-white transition-colors duration-300 group"
                 >
-                  <Icons.Github size={13} className="group-hover:text-black transition-colors" />
+                  <Icons.Github size={13} className="group-hover:text-white transition-colors" />
                   <span className="hidden sm:inline">GitHub</span>
                 </a>
               </div>
@@ -530,14 +586,14 @@ export default function App() {
                 href="#about"
                 className="group flex items-center gap-3 pointer-events-auto cursor-pointer"
               >
-                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-black/45 group-hover:text-black/70 transition-colors">
+                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/45 group-hover:text-white transition-colors">
                   Explore my work
                 </span>
                 <motion.div
                   animate={{ y: [0, 4, 0] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <svg className="w-3 h-3 text-black/45 group-hover:text-black/70 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <svg className="w-3 h-3 text-white/45 group-hover:text-white/70 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path d="M19 14l-7 7m0 0l-7-7" />
                   </svg>
                 </motion.div>
@@ -919,28 +975,26 @@ export default function App() {
                 const activeView = projectViews[project.title] || (hasDiagram ? 'flow' : 'mockup');
                 return (
                   <div key={project.title} className="group relative grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-center" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 500px' }}>
-                  <div className={`${activeView === 'flow' ? 'lg:col-span-7' : 'lg:col-span-6'} ${i % 2 !== 0 ? 'lg:order-last' : ''} transition-all duration-500`}>
+                    <div className={`${activeView === 'flow' ? 'lg:col-span-7' : 'lg:col-span-6'} ${i % 2 !== 0 ? 'lg:order-last' : ''} transition-all duration-500`}>
                       {hasDiagram && (
                         <div className="flex justify-between items-center mb-4 max-w-lg mx-auto">
                           <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/30">System Visualizer</span>
                           <div className="flex items-center gap-1.5 bg-black/40 border border-white/10 p-0.5 rounded-full select-none">
                             <button
                               onClick={() => setProjectViews(prev => ({ ...prev, [project.title]: 'mockup' }))}
-                              className={`px-3.5 py-1.5 rounded-full font-mono text-[8px] sm:text-[9px] uppercase tracking-widest transition-all duration-300 cursor-pointer ${
-                                activeView === 'mockup'
-                                  ? 'bg-white text-black font-semibold'
-                                  : 'text-white/40 hover:text-white'
-                              }`}
+                              className={`px-3.5 py-1.5 rounded-full font-mono text-[8px] sm:text-[9px] uppercase tracking-widest transition-all duration-300 cursor-pointer ${activeView === 'mockup'
+                                ? 'bg-white text-black font-semibold'
+                                : 'text-white/40 hover:text-white'
+                                }`}
                             >
                               Interface
                             </button>
                             <button
                               onClick={() => setProjectViews(prev => ({ ...prev, [project.title]: 'flow' }))}
-                              className={`px-3.5 py-1.5 rounded-full font-mono text-[8px] sm:text-[9px] uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center gap-1.5 ${
-                                activeView === 'flow'
-                                  ? 'bg-gold text-black font-semibold shadow-[0_0_10px_rgba(234,179,8,0.3)]'
-                                  : 'text-white/40 hover:text-white'
-                              }`}
+                              className={`px-3.5 py-1.5 rounded-full font-mono text-[8px] sm:text-[9px] uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center gap-1.5 ${activeView === 'flow'
+                                ? 'bg-gold text-black font-semibold shadow-[0_0_10px_rgba(234,179,8,0.3)]'
+                                : 'text-white/40 hover:text-white'
+                                }`}
                             >
                               System Flow
                               <span className={`inline-block w-1.5 h-1.5 rounded-full ${activeView === 'flow' ? 'bg-black animate-ping' : 'bg-gold/60'}`} />
@@ -1004,39 +1058,39 @@ export default function App() {
                           )}
                         </AnimatePresence>
                       </ScrollReveal>
+                    </div>
+
+                    <div className={`${activeView === 'flow' ? 'lg:col-span-5' : 'lg:col-span-6'} transition-all duration-500`}>
+                      <ScrollReveal>
+                        <h3 className="font-display text-3xl sm:text-4xl md:text-[5vw] leading-[0.9] text-gold font-bold uppercase mb-6 md:mb-8 tracking-tighter group-hover:scale-[1.02] transition-transform duration-500 origin-left">
+                          {project.title}
+                        </h3>
+                        <p className="text-white/60 text-base md:text-xl font-light leading-relaxed max-w-xl mb-6 md:mb-8">
+                          {project.desc}
+                        </p>
+
+                        {/* Technologies */}
+                        <div className="flex flex-wrap gap-2 md:gap-3 mb-8 md:mb-12">
+                          {project.tech.map(tech => (
+                            <div key={tech} className="px-4 py-2 rounded-full border border-white/10 bg-white/[0.02] text-white/50 font-mono text-[10px] uppercase tracking-widest hover:border-gold/30 hover:text-gold transition-colors cursor-default">
+                              {tech}
+                            </div>
+                          ))}
+                        </div>
+
+                        <a
+                          href={project.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="h-28 w-28 md:h-40 md:w-40 rounded-full border border-white/20 flex items-center justify-center group/btn hover:bg-white hover:border-white hover:text-black hover:scale-110 transition-all duration-500 font-mono text-[10px] uppercase tracking-widest"
+                        >
+                          VIEW LIVE
+                        </a>
+                      </ScrollReveal>
+                    </div>
                   </div>
-
-                  <div className={`${activeView === 'flow' ? 'lg:col-span-5' : 'lg:col-span-6'} transition-all duration-500`}>
-                    <ScrollReveal>
-                      <h3 className="font-display text-3xl sm:text-4xl md:text-[5vw] leading-[0.9] text-gold font-bold uppercase mb-6 md:mb-8 tracking-tighter group-hover:scale-[1.02] transition-transform duration-500 origin-left">
-                        {project.title}
-                      </h3>
-                      <p className="text-white/60 text-base md:text-xl font-light leading-relaxed max-w-xl mb-6 md:mb-8">
-                        {project.desc}
-                      </p>
-
-                      {/* Technologies */}
-                      <div className="flex flex-wrap gap-2 md:gap-3 mb-8 md:mb-12">
-                        {project.tech.map(tech => (
-                          <div key={tech} className="px-4 py-2 rounded-full border border-white/10 bg-white/[0.02] text-white/50 font-mono text-[10px] uppercase tracking-widest hover:border-gold/30 hover:text-gold transition-colors cursor-default">
-                            {tech}
-                          </div>
-                        ))}
-                      </div>
-
-                      <a
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="h-28 w-28 md:h-40 md:w-40 rounded-full border border-white/20 flex items-center justify-center group/btn hover:bg-white hover:border-white hover:text-black hover:scale-110 transition-all duration-500 font-mono text-[10px] uppercase tracking-widest"
-                      >
-                        VIEW LIVE
-                      </a>
-                    </ScrollReveal>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </section>
 
