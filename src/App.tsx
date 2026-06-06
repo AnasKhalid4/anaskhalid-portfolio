@@ -127,7 +127,7 @@ const Preloader = ({ onComplete }: { onComplete: () => void }) => {
       }}
       className="fixed inset-0 z-[200] bg-[#050505] flex flex-col justify-between px-6 md:px-12 py-8 md:py-12 overflow-hidden select-none"
     >
-      {/* Ambient background glows that charge up with the loading percentage */}
+      {/* Ambient background glows jljlthat charge up with the loading percentage */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         {/* Left blue glow */}
         <div 
@@ -137,7 +137,7 @@ const Preloader = ({ onComplete }: { onComplete: () => void }) => {
             transform: `scale(${0.8 + progressPercent * 0.4})` 
           }} 
         />
-        {/* Right orange glow */}
+        {/* Right orange glowjljljlljljl */}
         <div 
           className="absolute -right-[10%] top-[20%] w-[60%] h-[60%] rounded-full bg-[#FF5A00] opacity-0 blur-[120px] transition-all duration-500"
           style={{ 
