@@ -73,8 +73,8 @@
     }
 
     .hero-full {
-      height: var(--hero-h);
-      /* no fallback — var is always set before paint */
+      height: 100vh;
+      height: 100dvh;
     }
 
     /* Editorial outlined text for hero last name */

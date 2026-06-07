@@ -270,7 +270,6 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'web' | 'mobile'>('web');
   const [projectViews, setProjectViews] = useState<Record<string, 'mockup' | 'flow'>>({});
-  const [heroHeight] = useState(() => window.innerHeight);
   const { scrollY } = useScroll();
   const smoothScrollY = useSpring(scrollY, { damping: 20, stiffness: 80, mass: 0.5 });
   const heroY = useTransform(smoothScrollY, [0, 1000], [0, 250]);
@@ -435,7 +434,6 @@ export default function App() {
         ═══════════════════════════════════════════════════════ */}
         <section
           className="hero-full relative flex flex-col justify-end overflow-hidden bg-surface text-white"
-          style={{ height: heroHeight }}
         >
           {/* Hero Background Image Container with full-screen object-cover behavior */}
           <div className="absolute inset-0 z-0 overflow-hidden">
